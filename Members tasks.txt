@@ -1,0 +1,15 @@
+Amihaesei Sergiu
+----------------
+ - Back end
+ 
+Prepelita Andrei
+----------------
+ - Front end
+ 
+Iacob Cezar-Iustinian
+---------------------
+ - Neo4J
+ 
+Vasile Alexandru
+----------------
+ - Back end
