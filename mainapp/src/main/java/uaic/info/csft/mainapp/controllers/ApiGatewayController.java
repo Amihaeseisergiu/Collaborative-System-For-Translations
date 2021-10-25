@@ -17,13 +17,13 @@ public class ApiGatewayController {
 
     private final ApiGatewayService apiGatewayService;
 
-    @GetMapping("user/{id}/languages")
+    @GetMapping("users/{id}/languages")
     public List<Language> getUserLanguages(@PathVariable @Valid @Min(0) UUID id)
     {
         return apiGatewayService.getUserLanguages(id);
     }
 
-    @PostMapping("user/{id}/languages")
+    @PostMapping("users/{id}/languages")
     public void addUserLanguage(@PathVariable @Valid @Min(0) UUID id, @RequestBody Language language)
     {
         apiGatewayService.addUserLanguage(id, language);
