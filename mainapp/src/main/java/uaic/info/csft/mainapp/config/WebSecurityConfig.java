@@ -1,4 +1,4 @@
-package uaic.info.csft.mainapp.web;
+package uaic.info.csft.mainapp.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

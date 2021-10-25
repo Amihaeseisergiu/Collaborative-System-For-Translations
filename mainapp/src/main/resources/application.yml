@@ -1,4 +1,18 @@
 server:
+  port: 8080
   error:
     include-message: always
     include-binding-errors: always
+
+eureka:
+  dashboard:
+    path: /eurekaui
+  instance:
+    hostname: localhost
+  client:
+    registerWithEureka: false
+    fetchRegistry: false
+
+user-service:
+  ribbon:
+    listOfServers: http://localhost:8081
