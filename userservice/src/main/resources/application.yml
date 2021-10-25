@@ -1,0 +1,31 @@
+server:
+  port: 8081
+  error:
+    include-message: always
+    include-binding-errors: always
+
+spring:
+  application:
+    name: user-service
+  datasource:
+    password: test
+    url: jdbc:postgresql://localhost:5432/userservice
+    username: postgres
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    show-sql: true
+    open-in-view: false
+
+eureka:
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://localhost:8080/eureka/
+  instance:
+    hostname: localhost
