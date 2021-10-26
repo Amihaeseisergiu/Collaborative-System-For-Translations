@@ -4,15 +4,13 @@ server:
     include-message: always
     include-binding-errors: always
 
-eureka:
-  dashboard:
-    path: /eurekaui
-  instance:
-    hostname: localhost
-  client:
-    registerWithEureka: false
-    fetchRegistry: false
+spring:
+  application:
+    name: mainapp
 
-user-service:
-  ribbon:
-    listOfServers: http://localhost:8081
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true

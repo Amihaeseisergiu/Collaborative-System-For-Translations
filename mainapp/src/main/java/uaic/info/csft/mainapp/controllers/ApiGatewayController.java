@@ -23,6 +23,12 @@ public class ApiGatewayController {
         return apiGatewayService.getUserLanguages(id);
     }
 
+    @GetMapping("test")
+    public String test()
+    {
+        return apiGatewayService.test();
+    }
+
     @PostMapping("users/{id}/languages")
     public void addUserLanguage(@PathVariable @Valid @Min(0) UUID id, @RequestBody Language language)
     {

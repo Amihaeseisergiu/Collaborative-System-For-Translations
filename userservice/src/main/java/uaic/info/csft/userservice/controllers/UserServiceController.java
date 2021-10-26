@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("api/v1/users")
+@RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
 public class UserServiceController {
 
@@ -23,7 +23,13 @@ public class UserServiceController {
         return userService.getUserLanguages(id);
     }
 
-    @PutMapping("api/v1/user/{id}/languages")
+    @GetMapping("/test")
+    String test()
+    {
+        return "Test";
+    }
+
+    @PutMapping("/{id}/languages")
     void addUserLanguage(@PathVariable @Valid @Min(0) UUID id, @RequestBody Language language)
     {
         userService.addUserLanguage(id, language);

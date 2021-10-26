@@ -13,6 +13,11 @@ public class ApiGatewayService {
 
     private final UserServiceClient userServiceClient;
 
+    public String test()
+    {
+        return userServiceClient.test();
+    }
+
     public List<Language> getUserLanguages(UUID id)
     {
         return userServiceClient.getUserLanguages(id);

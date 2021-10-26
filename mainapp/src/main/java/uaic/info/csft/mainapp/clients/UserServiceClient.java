@@ -13,6 +13,9 @@ public interface UserServiceClient {
     @GetMapping("api/v1/users/{id}/languages")
     List<Language> getUserLanguages(@PathVariable @Valid UUID id);
 
+    @GetMapping("api/v1/users/test")
+    String test();
+
     @PutMapping("api/v1/users/{id}/languages")
     void addUserLanguage(@PathVariable @Valid UUID id, @RequestBody Language language);
 }
