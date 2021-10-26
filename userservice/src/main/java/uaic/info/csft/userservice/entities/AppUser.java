@@ -39,12 +39,6 @@ public class AppUser {
 
         AppUserBuilder() {}
 
-        public AppUser.AppUserBuilder id(final UUID id)
-        {
-            this.id = id;
-            return this;
-        }
-
         public AppUser.AppUserBuilder userName(final String userName)
         {
             this.userName = userName;
@@ -61,6 +55,11 @@ public class AppUser {
         {
             this.languages = languages;
             return this;
+        }
+
+        public AppUser build()
+        {
+            return new AppUser(this.id, this.userName, this.password, this.languages);
         }
     }
 }
