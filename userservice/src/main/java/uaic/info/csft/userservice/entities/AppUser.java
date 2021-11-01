@@ -15,29 +15,31 @@ import java.util.UUID;
 public class AppUser {
 
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(
-            name = "UUID",
-            strategy = "org.hibernate.id.UUIDGenerator"
-    )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private UUID id;
+    private Long id;
 
     private String userName;
     private String password;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Language> languages;
 
     @Getter
     public static class AppUserBuilder {
 
-        private UUID id;
+        private Long id;
         private String userName;
         private String password;
         private List<Language> languages;
 
-        AppUserBuilder() {}
+        public AppUserBuilder() {}
+
+        public AppUser.AppUserBuilder id(final Long id)
+        {
+            this.id = id;
+            return this;
+        }
 
         public AppUser.AppUserBuilder userName(final String userName)
         {

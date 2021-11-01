@@ -9,15 +9,14 @@ import uaic.info.csft.userservice.repositories.UserRepository;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @AllArgsConstructor
 public class UserService {
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    public List<Language> getUserLanguages(UUID id)
+    public List<Language> getUserLanguages(Long id)
     {
         Optional<AppUser> foundUser = userRepository.findById(id);
 
@@ -31,7 +30,7 @@ public class UserService {
         }
     }
 
-    public void addUserLanguage(UUID id, Language language)
+    public void addUserLanguage(Long id, Language language)
     {
         Optional<AppUser> foundUser = userRepository.findById(id);
 

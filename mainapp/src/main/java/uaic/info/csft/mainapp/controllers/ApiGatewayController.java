@@ -18,7 +18,7 @@ public class ApiGatewayController {
     private final ApiGatewayService apiGatewayService;
 
     @GetMapping("users/{id}/languages")
-    public List<Language> getUserLanguages(@PathVariable @Valid @Min(0) UUID id)
+    public List<Language> getUserLanguages(@PathVariable @Valid @Min(0) Long id)
     {
         return apiGatewayService.getUserLanguages(id);
     }
@@ -30,7 +30,7 @@ public class ApiGatewayController {
     }
 
     @PostMapping("users/{id}/languages")
-    public void addUserLanguage(@PathVariable @Valid @Min(0) UUID id, @RequestBody Language language)
+    public void addUserLanguage(@PathVariable @Valid @Min(0) Long id, @RequestBody Language language)
     {
         apiGatewayService.addUserLanguage(id, language);
     }

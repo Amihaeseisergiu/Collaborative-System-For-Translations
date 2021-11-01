@@ -8,7 +8,6 @@ import uaic.info.csft.userservice.services.UserService;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -18,7 +17,7 @@ public class UserServiceController {
     private final UserService userService;
 
     @GetMapping("/{id}/languages")
-    List<Language> getUserLanguages(@PathVariable @Valid @Min(0) UUID id)
+    List<Language> getUserLanguages(@PathVariable @Valid @Min(0) Long id)
     {
         return userService.getUserLanguages(id);
     }
@@ -30,7 +29,7 @@ public class UserServiceController {
     }
 
     @PutMapping("/{id}/languages")
-    void addUserLanguage(@PathVariable @Valid @Min(0) UUID id, @RequestBody Language language)
+    void addUserLanguage(@PathVariable @Valid @Min(0) Long id, @RequestBody Language language)
     {
         userService.addUserLanguage(id, language);
     }

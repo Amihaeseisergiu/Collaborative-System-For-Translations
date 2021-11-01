@@ -18,12 +18,12 @@ public class ApiGatewayService {
         return userServiceClient.test();
     }
 
-    public List<Language> getUserLanguages(UUID id)
+    public List<Language> getUserLanguages(Long id)
     {
         return userServiceClient.getUserLanguages(id);
     }
 
-    public void addUserLanguage(UUID id, Language language)
+    public void addUserLanguage(Long id, Language language)
     {
         userServiceClient.addUserLanguage(id, language);
     }
