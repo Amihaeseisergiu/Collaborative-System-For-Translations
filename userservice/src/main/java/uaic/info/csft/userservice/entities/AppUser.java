@@ -1,17 +1,17 @@
 package uaic.info.csft.userservice.entities;
 
 import lombok.*;
-import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.util.List;
-import java.util.UUID;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
+@Entity(name = "AppUser")
+@Table(name = "app_user")
 public class AppUser {
 
     @Id
@@ -22,46 +22,94 @@ public class AppUser {
     private String userName;
     private String password;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private List<Language> languages;
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+    })
+    @JoinTable(name = "app_user_language",
+            joinColumns = @JoinColumn(name = "app_user_id"),
+            inverseJoinColumns = @JoinColumn(name = "language_id")
+    )
+    private Set<Language> languages = new HashSet<>();
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "appUser", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Post> posts = new HashSet<>();
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "appUser", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Comment> comments = new HashSet<>();
+
+    public void addLanguage(Language language)
+    {
+        this.languages.add(language);
+        language.getAppUsers().add(this);
+    }
+
+    public void removeLanguage(Language language)
+    {
+        this.languages.remove(language);
+        language.getAppUsers().remove(this);
+    }
+
+    public void addPost(Post post)
+    {
+        this.posts.add(post);
+        post.setAppUser(this);
+    }
+
+    public void removePost(Post post)
+    {
+        this.posts.remove(post);
+        post.setAppUser(null);
+    }
+
+    public void addComment(Comment comment)
+    {
+        this.comments.add(comment);
+        comment.setAppUser(this);
+    }
+
+    public void removeComment(Comment comment)
+    {
+        this.comments.remove(comment);
+        comment.setAppUser(null);
+    }
 
     @Getter
     public static class AppUserBuilder {
 
-        private Long id;
-        private String userName;
-        private String password;
-        private List<Language> languages;
+        private final AppUser appUser;
 
-        public AppUserBuilder() {}
+        public AppUserBuilder() {
+            appUser = new AppUser();
+        }
 
         public AppUser.AppUserBuilder id(final Long id)
         {
-            this.id = id;
+            this.appUser.setId(id);
             return this;
         }
 
         public AppUser.AppUserBuilder userName(final String userName)
         {
-            this.userName = userName;
+            this.appUser.setUserName(userName);
             return this;
         }
 
         public AppUser.AppUserBuilder password(final String password)
         {
-            this.password = password;
+            this.appUser.setPassword(password);
             return this;
         }
 
-        public AppUser.AppUserBuilder languages(final List<Language> languages)
+        public AppUser.AppUserBuilder language(final Language language)
         {
-            this.languages = languages;
+            this.appUser.addLanguage(language);
             return this;
         }
 
         public AppUser build()
         {
-            return new AppUser(this.id, this.userName, this.password, this.languages);
+            return this.appUser;
         }
     }
 }
