@@ -14,7 +14,7 @@ import javax.validation.constraints.Min;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/v1/languages")
+@RequestMapping("/api/v1/languages")
 @RequiredArgsConstructor
 public class LanguageServiceController {
 

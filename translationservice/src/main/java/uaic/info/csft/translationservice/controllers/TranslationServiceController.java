@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import uaic.info.csft.translationservice.services.TranslationService;
 
 @RestController
-@RequestMapping("/v1/translate")
+@RequestMapping("/api/v1/translate")
 @RequiredArgsConstructor
 public class TranslationServiceController {
 

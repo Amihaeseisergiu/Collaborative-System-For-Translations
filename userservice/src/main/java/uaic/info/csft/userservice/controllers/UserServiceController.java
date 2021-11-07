@@ -11,7 +11,7 @@ import javax.validation.constraints.Min;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/v1/users")
+@RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
 public class UserServiceController {
 
