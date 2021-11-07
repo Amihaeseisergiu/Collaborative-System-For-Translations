@@ -25,7 +25,10 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class UserServiceTest {
 
+    @Autowired
     private UserService userService;
+
+    @Autowired
     private PostService postService;
 
     @Autowired
@@ -42,10 +45,6 @@ public class UserServiceTest {
     @BeforeAll
     public void setUp()
     {
-        MockitoAnnotations.openMocks(this);
-        userService = new UserService(userRepository);
-        postService = new PostService(postRepository);
-
         Faker faker = new Faker();
 
         languages.add(new Language(faker.nation().language(), Proficiencies.NATIVE));

@@ -2,6 +2,7 @@ package uaic.info.csft.userservice.services;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import uaic.info.csft.userservice.aop.TrackExecutionTime;
 import uaic.info.csft.userservice.entities.AppUser;
 import uaic.info.csft.userservice.entities.Language;
 import uaic.info.csft.userservice.entities.Post;
@@ -13,6 +14,7 @@ import java.util.Set;
 
 @Service
 @AllArgsConstructor
+@TrackExecutionTime
 public class LanguageService {
 
     private final LanguageRepository languageRepository;
