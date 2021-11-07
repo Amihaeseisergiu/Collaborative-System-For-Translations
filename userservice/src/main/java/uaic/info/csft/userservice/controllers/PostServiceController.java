@@ -10,7 +10,7 @@ import javax.validation.constraints.Min;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/posts")
+@RequestMapping("/v1/posts")
 @RequiredArgsConstructor
 public class PostServiceController {
 
