@@ -13,7 +13,7 @@ import java.util.Set;
 @RestController
 @RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
-public class UserServiceController {
+public class UserController {
 
     private final UserService userService;
 

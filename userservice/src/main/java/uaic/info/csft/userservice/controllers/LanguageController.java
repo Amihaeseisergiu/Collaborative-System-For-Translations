@@ -16,7 +16,7 @@ import java.util.Set;
 @RestController
 @RequestMapping("/api/v1/languages")
 @RequiredArgsConstructor
-public class LanguageServiceController {
+public class LanguageController {
 
     private final LanguageService languageService;
 
