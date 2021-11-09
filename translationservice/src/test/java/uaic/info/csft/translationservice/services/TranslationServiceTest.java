@@ -28,20 +28,20 @@ public class TranslationServiceTest {
 
     @Test
     public void testTranslation01() {
-        String sourceLanguage = "ENGLISH";
-        String targetLanguage = "ROMANIAN";
-        String translation = translationService.translate(sourceLanguage, targetLanguage, "words");
+        String sourceLanguage = "EN";
+        String targetLanguage = "RO";
+        String translation = translationService.translate(sourceLanguage, targetLanguage, "I like apples");
 
-        assertEquals(translation, "cuvinte");
+        assertEquals(translation, "Îmi plac merele");
     }
 
     @Test
     public void testTranslation02() {
-        String sourceLanguage = "ENGLISH";
-        String targetLanguage = "FRENCH";
-        String translation = translationService.translate(sourceLanguage, targetLanguage, "words");
+        String sourceLanguage = "EN";
+        String targetLanguage = "FR";
+        String translation = translationService.translate(sourceLanguage, targetLanguage, "My name is Alex");
 
-        assertEquals(translation, "mots");
+        assertEquals(translation, "Mon nom est Alex");
     }
 
     @Test
