@@ -1,15 +1,15 @@
 package uaic.info.csft.translationservice.services;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import org.mockito.MockitoAnnotations;
+
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.util.Assert;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.LongStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -46,17 +46,17 @@ public class TranslationServiceTest {
 
     @Test
     public void testAutoCorrect01() {
-        String language = "ENGLISH";
-        String correction = translationService.autoCorrect(language, "wrd");
+        String language = "EN-US";
+        List<String> replacements = translationService.autoCorrect(language, "wrd");
 
-        assertEquals(correction, "word");
+        Assertions.assertTrue(replacements.contains("word"));
     }
 
     @Test
     public void testAutoCorrect02() {
-        String language = "ROMANIAN";
-        String correction = translationService.autoCorrect(language, "cvant");
+        String language = "RO";
+        List<String> replacements = translationService.autoCorrect(language, "cvant");
 
-        assertEquals(correction, "cuvant");
+        Assertions.assertTrue(replacements.contains("cuvânt"));
     }
 }
