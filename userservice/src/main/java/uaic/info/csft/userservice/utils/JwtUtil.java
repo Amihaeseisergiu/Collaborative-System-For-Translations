@@ -17,10 +17,10 @@ import java.util.Map;
 @SuppressWarnings("WeakerAccess")
 public class JwtUtil {
 
-    @Value("${jwt.secret}")
+    @Value("${jwt.secret:eB9aQjm3N0HF6Xqbj6N0c7picYrhLBze}")
     private String secret;
 
-    @Value("${jwt.expire}")
+    @Value("${jwt.expire:1209600}")
     private Long expirationTime;
 
     public Claims getClaimsFromToken(String token) {
