@@ -4,13 +4,14 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import uaic.info.csft.userservice.aop.TrackExecutionTime;
 import uaic.info.csft.userservice.entities.Comment;
+import uaic.info.csft.userservice.entities.Language;
 import uaic.info.csft.userservice.entities.Post;
-import uaic.info.csft.userservice.exceptions.LanguageNotFoundException;
-import uaic.info.csft.userservice.exceptions.PostNotFoundException;
+import uaic.info.csft.userservice.exceptions.EntityNotFoundException;
 import uaic.info.csft.userservice.repositories.PostRepository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @AllArgsConstructor
@@ -18,8 +19,9 @@ import java.util.Optional;
 public class PostService {
 
     private final PostRepository postRepository;
+    private final UserService userService;
 
-    public List<Comment> getComments(Long id)
+    public Set<Comment> getComments(Long id)
     {
         Optional<Post> foundPost = postRepository.findById(id);
 
@@ -29,28 +31,31 @@ public class PostService {
         }
         else
         {
-            throw new PostNotFoundException(id);
+            throw new EntityNotFoundException(Post.class, id);
         }
     }
 
     public void addComment(Long id, Comment comment)
     {
         Optional<Post> foundPost = postRepository.findById(id);
+        comment.setUser(userService.getUserFromRequest());
 
         if(foundPost.isPresent())
         {
             Post post = foundPost.get();
 
-            if(comment.getAppUser().getLanguages().stream().noneMatch(l -> l.getId().equals(post.getLanguage().getId())))
+            if(comment.getUser().getLanguages().stream().noneMatch(l -> l.getName().equals(post.getLanguage().getName())
+                && l.getProficiency().compareTo(post.getLanguage().getProficiency()) >= 0))
             {
-                throw new LanguageNotFoundException(post.getLanguage().getId());
+                throw new EntityNotFoundException(Language.class, post.getLanguage().toString());
             }
 
             post.addComment(comment);
+            postRepository.save(post);
         }
         else
         {
-            throw new PostNotFoundException(id);
+            throw new EntityNotFoundException(Post.class, id);
         }
     }
 }

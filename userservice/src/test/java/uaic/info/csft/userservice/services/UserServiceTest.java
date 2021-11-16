@@ -4,16 +4,15 @@ import com.github.javafaker.Faker;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
 import uaic.info.csft.userservice.entities.*;
 import uaic.info.csft.userservice.repositories.LanguageRepository;
 import uaic.info.csft.userservice.repositories.PostRepository;
 import uaic.info.csft.userservice.repositories.UserRepository;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -24,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @ActiveProfiles("test")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@Transactional
 public class UserServiceTest {
 
     @Autowired
@@ -53,12 +53,12 @@ public class UserServiceTest {
         languages.add(new Language(faker.nation().language(), Proficiencies.B2));
         languageRepository.saveAll(languages);
 
-        List<AppUser> users = new ArrayList<>();
+        List<User> users = new ArrayList<>();
 
         LongStream.range(1, 1000)
             .mapToObj(id -> {
-                AppUser.AppUserBuilder appUserBuilder = new AppUser.AppUserBuilder();
-                AppUser user = appUserBuilder.id(id)
+                User.UserBuilder userBuilder = new User.UserBuilder();
+                User user = userBuilder.id(id)
                         .userName(faker.name().firstName())
                         .password(faker.internet().password())
                         .language(languages.get(0)).language(languages.get(1)).build();
@@ -92,7 +92,7 @@ public class UserServiceTest {
 
         for(Language language : userLanguages)
         {
-            assertTrue(language.getAppUsers().stream().anyMatch(u -> u.getId().equals(id)));
+            assertTrue(language.getUsers().stream().anyMatch(u -> u.getId().equals(id)));
         }
     }
 
@@ -103,7 +103,7 @@ public class UserServiceTest {
         userService.addUserLanguage(id, languages.get(2));
         Set<Language> userLanguages = userService.getUserLanguages(id);
 
-        assertEquals(1, (int) userLanguages.stream().filter(l -> l.getName().equals(languages.get(2).getName())).count());
+        assertEquals(1, (int) userLanguages.stream().filter(l -> l.equals(languages.get(2))).count());
     }
 
     @Test
@@ -117,7 +117,7 @@ public class UserServiceTest {
 
         for(Post post : userPosts)
         {
-            assertEquals(id, (long) post.getAppUser().getId());
+            assertEquals(id, (long) post.getUser().getId());
 
             for(Comment comment : post.getComments())
             {
@@ -129,7 +129,7 @@ public class UserServiceTest {
     @Test
     public void testAddPostToUser() {
         final Long id = 1L;
-        AppUser replier = userService.findUser(2L);
+        User replier = userService.findUserById(2L);
 
         Post post = new Post.PostBuilder()
                 .title("Test Title")
@@ -140,7 +140,7 @@ public class UserServiceTest {
 
         userService.addUserPost(id, post);
 
-        assertEquals(id, post.getAppUser().getId());
+        assertEquals(id, post.getUser().getId());
     }
 
     @Test
@@ -148,7 +148,7 @@ public class UserServiceTest {
     {
         final Long id = 1L;
 
-        List<Comment> userComments = postService.getComments(id);
+        Set<Comment> userComments = postService.getComments(id);
 
         assertFalse(userComments.isEmpty());
 
@@ -156,17 +156,5 @@ public class UserServiceTest {
         {
             assertEquals(comment.getPost().getId(), id);
         }
-    }
-
-    @Test
-    public void testPostComment()
-    {
-        final Long id = 1L;
-        AppUser replier = userService.findUser(2L);
-
-        Comment comment = new Comment(replier, "Test message");
-        postService.addComment(id, comment);
-
-        assertEquals(comment.getPost().getId(), id);
     }
 }

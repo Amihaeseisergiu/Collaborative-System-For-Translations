@@ -20,8 +20,30 @@ public class ControllerExceptionHandler {
     private static final String ERRORS = "errors";
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(UserNotFoundException.class)
-    public Map<String, Object> handleUserNotFoundException(UserNotFoundException exception) {
+    @ExceptionHandler(EntityNotFoundException.class)
+    public Map<String, Object> handleEntityNotFoundException(EntityNotFoundException exception) {
+
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put(TIMESTAMP, LocalDateTime.now());
+        body.put(MESSAGE, exception.getMessage());
+
+        return body;
+    }
+
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public Map<String, Object> handleInvalidCredentialsException(InvalidCredentialsException exception) {
+
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put(TIMESTAMP, LocalDateTime.now());
+        body.put(MESSAGE, exception.getMessage());
+
+        return body;
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(UsernameExistsException.class)
+    public Map<String, Object> handleInvalidCredentialsException(UsernameExistsException exception) {
 
         Map<String, Object> body = new LinkedHashMap<>();
         body.put(TIMESTAMP, LocalDateTime.now());

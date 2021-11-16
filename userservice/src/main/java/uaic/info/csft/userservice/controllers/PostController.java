@@ -7,7 +7,7 @@ import uaic.info.csft.userservice.services.PostService;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
-import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/v1/posts")
@@ -17,7 +17,7 @@ public class PostController {
     private final PostService postService;
 
     @GetMapping("/{id}/comments")
-    List<Comment> getPostComments(@PathVariable @Valid @Min(0) Long id)
+    Set<Comment> getPostComments(@PathVariable @Valid @Min(0) Long id)
     {
         return postService.getComments(id);
     }

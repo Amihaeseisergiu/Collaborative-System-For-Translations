@@ -1,16 +1,15 @@
 package uaic.info.csft.userservice.controllers;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import uaic.info.csft.userservice.entities.AppUser;
+import org.springframework.web.bind.annotation.*;
+import uaic.info.csft.userservice.entities.Proficiencies;
+import uaic.info.csft.userservice.entities.User;
 import uaic.info.csft.userservice.entities.Post;
 import uaic.info.csft.userservice.services.LanguageService;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Min;
+import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @RestController
@@ -20,15 +19,15 @@ public class LanguageController {
 
     private final LanguageService languageService;
 
-    @GetMapping("/{id}/users")
-    Set<AppUser> getLanguageUsers(@PathVariable @Valid @Min(0) Long id)
+    @GetMapping("/{name}/users")
+    Set<User> getLanguageUsers(@PathVariable @Valid String name, @RequestParam Optional<List<Proficiencies>> proficiencies)
     {
-        return languageService.getLanguageUsers(id);
+        return languageService.getLanguageUsers(name, proficiencies);
     }
 
-    @GetMapping("/{id}/posts")
-    Set<Post> getLanguagePosts(@PathVariable @Valid @Min(0) Long id)
+    @GetMapping("/{name}/posts")
+    Set<Post> getLanguagePosts(@PathVariable @Valid String name, @RequestParam Optional<List<Proficiencies>> proficiencies)
     {
-        return languageService.getLanguagePosts(id);
+        return languageService.getLanguagePosts(name, proficiencies);
     }
 }

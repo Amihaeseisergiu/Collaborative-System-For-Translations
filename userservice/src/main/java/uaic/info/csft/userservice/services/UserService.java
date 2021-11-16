@@ -1,28 +1,49 @@
 package uaic.info.csft.userservice.services;
 
-import lombok.AllArgsConstructor;
+import io.jsonwebtoken.Claims;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import uaic.info.csft.userservice.aop.TrackExecutionTime;
-import uaic.info.csft.userservice.entities.AppUser;
+import uaic.info.csft.userservice.entities.User;
 import uaic.info.csft.userservice.entities.Language;
 import uaic.info.csft.userservice.entities.Post;
-import uaic.info.csft.userservice.exceptions.LanguageNotFoundException;
-import uaic.info.csft.userservice.exceptions.UserNotFoundException;
+import uaic.info.csft.userservice.exceptions.EntityNotFoundException;
+import uaic.info.csft.userservice.repositories.LanguageRepository;
 import uaic.info.csft.userservice.repositories.UserRepository;
+import uaic.info.csft.userservice.utils.JwtUtil;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 import java.util.Set;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 @TrackExecutionTime
 public class UserService {
 
-    private final UserRepository userRepository;
+    @Value("${jwt.header:Authorization}")
+    private String jwtHeader;
 
-    public AppUser findUser(Long id)
+    private final UserRepository userRepository;
+    private final LanguageRepository languageRepository;
+    private final JwtUtil jwtUtil;
+
+    public User getUserFromRequest()
     {
-        Optional<AppUser> foundUser = userRepository.findById(id);
+        ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        assert servletRequestAttributes != null;
+
+        HttpServletRequest request = servletRequestAttributes.getRequest();
+
+        final String token = request.getHeader(jwtHeader);
+        final Claims claims = jwtUtil.getClaimsFromToken(token);
+
+        final Long userId = Long.valueOf((Integer) claims.get("id"));
+
+        Optional<User> foundUser = userRepository.findById(userId);
 
         if(foundUser.isPresent())
         {
@@ -30,13 +51,27 @@ public class UserService {
         }
         else
         {
-            throw new UserNotFoundException(id);
+            throw new EntityNotFoundException(User.class, userId);
         }
     }
 
-    public Set<Language> getUserLanguages(Long id)
+    public User findUserById(Long id)
     {
-        Optional<AppUser> foundUser = userRepository.findById(id);
+        Optional<User> foundUser = userRepository.findById(id);
+
+        if(foundUser.isPresent())
+        {
+            return foundUser.get();
+        }
+        else
+        {
+            throw new EntityNotFoundException(User.class, id);
+        }
+    }
+
+    public Set<Language> getUserLanguages(Long userId)
+    {
+        Optional<User> foundUser = userRepository.findById(userId);
 
         if(foundUser.isPresent())
         {
@@ -44,35 +79,36 @@ public class UserService {
         }
         else
         {
-            throw new UserNotFoundException(id);
+            throw new EntityNotFoundException(User.class, userId);
         }
     }
 
     public void addUserLanguage(Long id, Language language)
     {
-        Optional<AppUser> foundUser = userRepository.findById(id);
+        Optional<User> foundUser = userRepository.findById(id);
 
         if(foundUser.isPresent())
         {
-            AppUser appUser = foundUser.get();
-            Set<Language> userLanguages = appUser.getLanguages();
+            User user = foundUser.get();
+            Set<Language> userLanguages = user.getLanguages();
 
-            if(userLanguages.stream().noneMatch(l -> l.getId().equals(language.getId())))
+            if(userLanguages.stream().noneMatch(l -> l.equals(language)))
             {
-                appUser.addLanguage(language);
-            }
+                languageRepository.save(language);
+                user.addLanguage(language);
 
-            userRepository.saveAndFlush(appUser);
+                userRepository.saveAndFlush(user);
+            }
         }
         else
         {
-            throw new UserNotFoundException(id);
+            throw new EntityNotFoundException(User.class, id);
         }
     }
 
     public Set<Post> getUserPosts(Long id)
     {
-        Optional<AppUser> foundUser = userRepository.findById(id);
+        Optional<User> foundUser = userRepository.findById(id);
 
         if(foundUser.isPresent())
         {
@@ -80,30 +116,30 @@ public class UserService {
         }
         else
         {
-            throw new UserNotFoundException(id);
+            throw new EntityNotFoundException(User.class, id);
         }
     }
 
     public void addUserPost(Long id, Post post)
     {
-        Optional<AppUser> foundUser = userRepository.findById(id);
+        Optional<User> foundUser = userRepository.findById(id);
 
         if(foundUser.isPresent())
         {
-            AppUser appUser = foundUser.get();
+            User user = foundUser.get();
 
-            if(appUser.getLanguages().stream().noneMatch(l -> l.getId().equals(post.getLanguage().getId())))
+            if(user.getLanguages().stream().noneMatch(l -> l.equals(post.getLanguage())))
             {
-                throw new LanguageNotFoundException(post.getLanguage().getId());
+                throw new EntityNotFoundException(Language.class, post.getLanguage().toString());
             }
 
-            appUser.addPost(post);
+            user.addPost(post);
 
-            userRepository.saveAndFlush(appUser);
+            userRepository.saveAndFlush(user);
         }
         else
         {
-            throw new UserNotFoundException(id);
+            throw new EntityNotFoundException(User.class, id);
         }
     }
 }

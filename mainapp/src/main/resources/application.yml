@@ -28,3 +28,4 @@ zuul:
     translation-service:
       path: /translation-service/**
       url: http://localhost:8082/
+  sensitive-headers:

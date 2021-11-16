@@ -3,14 +3,13 @@ package uaic.info.csft.userservice.services;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import uaic.info.csft.userservice.aop.TrackExecutionTime;
-import uaic.info.csft.userservice.entities.AppUser;
+import uaic.info.csft.userservice.entities.Proficiencies;
+import uaic.info.csft.userservice.entities.User;
 import uaic.info.csft.userservice.entities.Language;
 import uaic.info.csft.userservice.entities.Post;
-import uaic.info.csft.userservice.exceptions.LanguageNotFoundException;
 import uaic.info.csft.userservice.repositories.LanguageRepository;
 
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -19,33 +18,54 @@ public class LanguageService {
 
     private final LanguageRepository languageRepository;
 
-    public Set<AppUser> getLanguageUsers(Long id)
+    public Set<User> getLanguageUsers(String name, Optional<List<Proficiencies>> proficiencies)
     {
-        Optional<Language> foundLanguage = languageRepository.findById(id);
+        List<Language> languages = getLanguages(name, proficiencies);
 
-        if(foundLanguage.isPresent())
+        Set<User> users = new HashSet<>();
+
+        for(Language language : languages)
         {
-            Language language = foundLanguage.get();
-            return language.getAppUsers();
+            users.addAll(language.getUsers());
         }
-        else
-        {
-            throw new LanguageNotFoundException(id);
-        }
+
+        return users;
     }
 
-    public Set<Post> getLanguagePosts(Long id)
+    public Set<Post> getLanguagePosts(String name, Optional<List<Proficiencies>> proficiencies)
     {
-        Optional<Language> foundLanguage = languageRepository.findById(id);
+        List<Language> languages = getLanguages(name, proficiencies);
 
-        if(foundLanguage.isPresent())
+        Set<Post> posts = new HashSet<>();
+
+        for(Language language : languages)
         {
-            Language language = foundLanguage.get();
-            return language.getPosts();
+            posts.addAll(language.getPosts());
+        }
+
+        return posts;
+    }
+
+    private List<Language> getLanguages(String name, Optional<List<Proficiencies>> proficiencies) {
+        List<Language> languages = new ArrayList<>();
+
+        if(proficiencies.isEmpty())
+        {
+            languages = languageRepository.findByName(name);
         }
         else
         {
-            throw new LanguageNotFoundException(id);
+            List<Proficiencies> profs = proficiencies.get();
+            for(Proficiencies p : profs)
+            {
+                Optional<Language> foundLanguage = languageRepository.findByNameAndProficiency(name, p);
+
+                if(foundLanguage.isPresent())
+                {
+                    languages.add(foundLanguage.get());
+                }
+            }
         }
+        return languages;
     }
 }

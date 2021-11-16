@@ -6,14 +6,15 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Table(name = "posts")
 public class Post {
 
     @Id
@@ -21,17 +22,20 @@ public class Post {
     @Column(name = "id", nullable = false)
     private Long id;
 
+    @Column(name = "title")
     private String title;
+
+    @Column(name = "message")
     private String message;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Language language;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Comment> comments = new ArrayList<>();
+    private Set<Comment> comments = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private AppUser appUser;
+    private User user;
 
     public void addComment(Comment comment)
     {
@@ -51,9 +55,9 @@ public class Post {
         language.getPosts().add(this);
     }
 
-    public void addUser(AppUser appUser)
+    public void addUser(User user)
     {
-        appUser.addPost(this);
+        user.addPost(this);
     }
 
     public static class PostBuilder {
@@ -94,9 +98,9 @@ public class Post {
             return this;
         }
 
-        public Post.PostBuilder user(final AppUser appUser)
+        public Post.PostBuilder user(final User user)
         {
-            this.post.addUser(appUser);
+            this.post.addUser(user);
             return this;
         }
 
