@@ -35,6 +35,11 @@ public class Comment {
     @JoinColumn(name = "user_id")
     private User user;
 
+    public Comment(String message)
+    {
+        this.message = message;
+    }
+
     public Comment(User user, String message)
     {
         this.message = message;

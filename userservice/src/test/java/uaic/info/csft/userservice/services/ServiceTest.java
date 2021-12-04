@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @ActiveProfiles("test")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Transactional
-public class UserServiceTest {
+public class ServiceTest {
 
     @Autowired
     private UserService userService;

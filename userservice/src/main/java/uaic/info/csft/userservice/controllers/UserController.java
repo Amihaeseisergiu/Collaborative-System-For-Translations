@@ -7,7 +7,6 @@ import uaic.info.csft.userservice.entities.Language;
 import uaic.info.csft.userservice.entities.Post;
 import uaic.info.csft.userservice.services.UserService;
 
-import javax.transaction.Transactional;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import java.util.Set;
