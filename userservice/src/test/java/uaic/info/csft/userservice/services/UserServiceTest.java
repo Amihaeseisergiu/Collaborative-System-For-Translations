@@ -15,6 +15,7 @@ import uaic.info.csft.userservice.repositories.UserRepository;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.LongStream;
 
@@ -31,6 +32,9 @@ public class UserServiceTest {
 
     @Autowired
     private PostService postService;
+
+    @Autowired
+    private LanguageService languageService;
 
     @Autowired
     private UserRepository userRepository;
@@ -156,5 +160,21 @@ public class UserServiceTest {
         {
             assertEquals(comment.getPost().getId(), id);
         }
+    }
+
+    @Test
+    public void testGetLanguageUsers()
+    {
+        Set<User> users = languageService.getLanguageUsers(languages.get(0).getName(), Optional.empty());
+
+        assertNotEquals(users.size(), 0);
+    }
+
+    @Test
+    public void testGetLanguagePosts()
+    {
+        Set<Post> posts = languageService.getLanguagePosts(languages.get(0).getName(), Optional.empty());
+
+        assertNotEquals(posts.size(), 0);
     }
 }

@@ -9,7 +9,6 @@ import uaic.info.csft.userservice.entities.Post;
 import uaic.info.csft.userservice.exceptions.EntityNotFoundException;
 import uaic.info.csft.userservice.repositories.PostRepository;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
