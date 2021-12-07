@@ -55,91 +55,46 @@ public class UserService {
         }
     }
 
-    public User findUserById(Long id)
+    public Set<Language> getUserLanguages()
     {
-        Optional<User> foundUser = userRepository.findById(id);
+        User user = this.getUserFromRequest();
 
-        if(foundUser.isPresent())
-        {
-            return foundUser.get();
-        }
-        else
-        {
-            throw new EntityNotFoundException(User.class, id);
-        }
+        return user.getLanguages();
     }
 
-    public Set<Language> getUserLanguages(Long userId)
+    public void addUserLanguage(Language language)
     {
-        Optional<User> foundUser = userRepository.findById(userId);
+        User user = this.getUserFromRequest();
 
-        if(foundUser.isPresent())
+        Set<Language> userLanguages = user.getLanguages();
+
+        if(userLanguages.stream().noneMatch(l -> l.equals(language)))
         {
-            return foundUser.get().getLanguages();
-        }
-        else
-        {
-            throw new EntityNotFoundException(User.class, userId);
-        }
-    }
-
-    public void addUserLanguage(Long id, Language language)
-    {
-        Optional<User> foundUser = userRepository.findById(id);
-
-        if(foundUser.isPresent())
-        {
-            User user = foundUser.get();
-            Set<Language> userLanguages = user.getLanguages();
-
-            if(userLanguages.stream().noneMatch(l -> l.equals(language)))
-            {
-                languageRepository.save(language);
-                user.addLanguage(language);
-
-                userRepository.saveAndFlush(user);
-            }
-        }
-        else
-        {
-            throw new EntityNotFoundException(User.class, id);
-        }
-    }
-
-    public Set<Post> getUserPosts(Long id)
-    {
-        Optional<User> foundUser = userRepository.findById(id);
-
-        if(foundUser.isPresent())
-        {
-            return foundUser.get().getPosts();
-        }
-        else
-        {
-            throw new EntityNotFoundException(User.class, id);
-        }
-    }
-
-    public void addUserPost(Long id, Post post)
-    {
-        Optional<User> foundUser = userRepository.findById(id);
-
-        if(foundUser.isPresent())
-        {
-            User user = foundUser.get();
-
-            if(user.getLanguages().stream().noneMatch(l -> l.equals(post.getLanguage())))
-            {
-                throw new EntityNotFoundException(Language.class, post.getLanguage().toString());
-            }
-
-            user.addPost(post);
+            languageRepository.save(language);
+            user.addLanguage(language);
 
             userRepository.saveAndFlush(user);
         }
-        else
+    }
+
+    public Set<Post> getUserPosts()
+    {
+        User user = this.getUserFromRequest();
+
+        return user.getPosts();
+    }
+
+    public void addUserPost(Post post)
+    {
+        User user = this.getUserFromRequest();
+
+        if(user.getLanguages().stream().noneMatch(l -> l.equals(post.getLanguage())))
         {
-            throw new EntityNotFoundException(User.class, id);
+            throw new EntityNotFoundException(Language.class, post.getLanguage().toString());
         }
+
+        user.addPost(post);
+
+        userRepository.saveAndFlush(user);
     }
 }

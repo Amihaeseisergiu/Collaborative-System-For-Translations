@@ -2,13 +2,10 @@ package uaic.info.csft.userservice.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import uaic.info.csft.userservice.aop.UserSecured;
 import uaic.info.csft.userservice.entities.Language;
 import uaic.info.csft.userservice.entities.Post;
 import uaic.info.csft.userservice.services.UserService;
 
-import javax.validation.Valid;
-import javax.validation.constraints.Min;
 import java.util.Set;
 
 @RestController
@@ -18,37 +15,27 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/test")
-    String test()
+    @GetMapping("/languages")
+    Set<Language> getUserLanguages()
     {
-        return "Test";
+        return userService.getUserLanguages();
     }
 
-    @UserSecured
-    @GetMapping("/{id}/languages")
-    Set<Language> getUserLanguages(@PathVariable @Valid @Min(0) Long id)
+    @PostMapping("/languages")
+    void addUserLanguage(@RequestBody Language language)
     {
-        return userService.getUserLanguages(id);
+        userService.addUserLanguage(language);
     }
 
-    @UserSecured
-    @PutMapping("/{id}/languages")
-    void addUserLanguage(@PathVariable @Valid @Min(0) Long id, @RequestBody Language language)
+    @GetMapping("/posts")
+    Set<Post> getUserPosts()
     {
-        userService.addUserLanguage(id, language);
+        return userService.getUserPosts();
     }
 
-    @UserSecured
-    @GetMapping("/{id}/posts")
-    Set<Post> getUserPosts(@PathVariable @Valid @Min(0) Long id)
+    @PostMapping("/posts")
+    void addUserPost(@RequestBody Post post)
     {
-        return userService.getUserPosts(id);
-    }
-
-    @UserSecured
-    @PutMapping("/{id}/posts")
-    void addUserPost(@PathVariable @Valid @Min(0) Long id, @RequestBody Post post)
-    {
-        userService.addUserPost(id, post);
+        userService.addUserPost(post);
     }
 }

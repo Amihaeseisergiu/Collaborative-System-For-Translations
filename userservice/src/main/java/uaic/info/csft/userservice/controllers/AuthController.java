@@ -3,12 +3,10 @@ package uaic.info.csft.userservice.controllers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import uaic.info.csft.userservice.dto.LoginDTO;
 import uaic.info.csft.userservice.dto.RegisterDTO;
+import uaic.info.csft.userservice.entities.User;
 import uaic.info.csft.userservice.services.AuthService;
 
 @RestController
@@ -32,5 +30,13 @@ public class AuthController {
         authService.register(registerDTO);
 
         return new ResponseEntity<>("Registered Successfully", HttpStatus.OK);
+    }
+
+    @GetMapping("/user")
+    public ResponseEntity<User> user()
+    {
+        User u = authService.getUser();
+
+        return new ResponseEntity<>(u, HttpStatus.OK);
     }
 }

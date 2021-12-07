@@ -98,7 +98,7 @@ public class ControllerTest {
         Language language = new Language("French", Proficiencies.B2);
 
         mockMvc.perform(MockMvcRequestBuilders
-                        .put("/api/v1/users/1/languages")
+                        .post("/api/v1/users/languages")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(language))
                         .header("Authorization", token.get()))
@@ -109,7 +109,7 @@ public class ControllerTest {
     public void test4GetUserLanguages() throws Exception
     {
         mockMvc.perform(MockMvcRequestBuilders
-                        .get("/api/v1/users/1/languages")
+                        .get("/api/v1/users/languages")
                         .contentType(MediaType.APPLICATION_JSON)
                         .header("Authorization", token.get()))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -127,7 +127,7 @@ public class ControllerTest {
                 .build();
 
         mockMvc.perform(MockMvcRequestBuilders
-                        .put("/api/v1/users/1/posts")
+                        .post("/api/v1/users/posts")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(post))
                         .header("Authorization", token.get()))
@@ -138,7 +138,7 @@ public class ControllerTest {
     public void test6GetUserPosts() throws Exception
     {
         mockMvc.perform(MockMvcRequestBuilders
-                        .get("/api/v1/users/1/posts")
+                        .get("/api/v1/users/posts")
                         .contentType(MediaType.APPLICATION_JSON)
                         .header("Authorization", token.get()))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -152,7 +152,7 @@ public class ControllerTest {
         Comment comment = new Comment("Test Comment");
 
         mockMvc.perform(MockMvcRequestBuilders
-                        .put("/api/v1/posts/1/comments")
+                        .post("/api/v1/posts/1/comments")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(comment))
                         .header("Authorization", token.get()))
@@ -160,7 +160,19 @@ public class ControllerTest {
     }
 
     @Test
-    public void test8GetPostComments() throws Exception
+    public void test80GetPost() throws Exception
+    {
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/api/v1/posts/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", token.get()))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers
+                        .jsonPath("$.title", Matchers.is("Test Title")));
+    }
+
+    @Test
+    public void test81GetPostComments() throws Exception
     {
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/api/v1/posts/1/comments")

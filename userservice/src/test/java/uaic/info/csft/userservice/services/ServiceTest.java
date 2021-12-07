@@ -28,9 +28,6 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ServiceTest {
 
     @Autowired
-    private UserService userService;
-
-    @Autowired
     private PostService postService;
 
     @Autowired
@@ -83,68 +80,6 @@ public class ServiceTest {
                     return postBuilder.build();
                 })
                 .forEach(postRepository::save);
-    }
-
-    @Test
-    public void testGetUserLanguages()
-    {
-        final Long id = 1L;
-
-        Set<Language> userLanguages = userService.getUserLanguages(id);
-
-        assertFalse(userLanguages.isEmpty());
-
-        for(Language language : userLanguages)
-        {
-            assertTrue(language.getUsers().stream().anyMatch(u -> u.getId().equals(id)));
-        }
-    }
-
-    @Test
-    public void testAddLanguageToUser() {
-        final Long id = 1L;
-
-        userService.addUserLanguage(id, languages.get(2));
-        Set<Language> userLanguages = userService.getUserLanguages(id);
-
-        assertEquals(1, (int) userLanguages.stream().filter(l -> l.equals(languages.get(2))).count());
-    }
-
-    @Test
-    public void testGetUserPosts()
-    {
-        final Long id = 1L;
-
-        Set<Post> userPosts = userService.getUserPosts(id);
-
-        assertFalse(userPosts.isEmpty());
-
-        for(Post post : userPosts)
-        {
-            assertEquals(id, (long) post.getUser().getId());
-
-            for(Comment comment : post.getComments())
-            {
-                assertEquals(comment.getPost().getId(), post.getId());
-            }
-        }
-    }
-
-    @Test
-    public void testAddPostToUser() {
-        final Long id = 1L;
-        User replier = userService.findUserById(2L);
-
-        Post post = new Post.PostBuilder()
-                .title("Test Title")
-                .message("Test Message")
-                .comment(new Comment(replier, "Test Comment"))
-                .language(languages.get(0))
-                .build();
-
-        userService.addUserPost(id, post);
-
-        assertEquals(id, post.getUser().getId());
     }
 
     @Test

@@ -14,4 +14,4 @@ Project for the "Advanced Software Engineering Techniques" course
   - [Google Drive](https://drive.google.com/drive/folders/1ZmdM438VgU5OsXk8UYbUfhJT7rzUU1wn?usp=sharing)
   - [Trello](https://trello.com/invite/b/B3Eo2NaR/cc3f8514f36f0beb25af79a6b0d7c592/projects-calls)
   
-### [Load Test](https://loadster.app/dashboard/reports/7SVE6xVQN5aXVWsh)
+### [Load Test](https://loadster.app/dashboard/reports/O426KjQek76FXAgX)

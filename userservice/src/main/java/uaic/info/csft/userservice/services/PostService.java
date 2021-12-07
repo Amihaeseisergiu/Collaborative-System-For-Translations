@@ -20,6 +20,20 @@ public class PostService {
     private final PostRepository postRepository;
     private final UserService userService;
 
+    public Post getPost(Long id)
+    {
+        Optional<Post> foundPost = postRepository.findById(id);
+
+        if(foundPost.isPresent())
+        {
+            return foundPost.get();
+        }
+        else
+        {
+            throw new EntityNotFoundException(Post.class, id);
+        }
+    }
+
     public Set<Comment> getComments(Long id)
     {
         Optional<Post> foundPost = postRepository.findById(id);

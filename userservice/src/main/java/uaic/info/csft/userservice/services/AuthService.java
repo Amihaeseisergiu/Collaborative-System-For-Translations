@@ -20,6 +20,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class AuthService {
 
+    private final UserService userService;
     private final UserRepository userRepository;
     private final LanguageRepository languageRepository;
     private final PasswordEncoder passwordEncoder;
@@ -64,5 +65,10 @@ public class AuthService {
                 .build();
 
         userRepository.saveAndFlush(user);
+    }
+
+    public User getUser()
+    {
+        return userService.getUserFromRequest();
     }
 }
