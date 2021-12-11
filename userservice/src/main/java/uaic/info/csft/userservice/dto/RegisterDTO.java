@@ -8,7 +8,7 @@ import java.util.List;
 @Data
 public class RegisterDTO {
 
-    String username;
-    String password;
-    List<Language> languages;
+    private String username;
+    private String password;
+    private List<Language> languages;
 }

@@ -33,7 +33,8 @@ public class UserService {
 
     public User getUserFromRequest()
     {
-        ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes)
+                RequestContextHolder.getRequestAttributes();
         assert servletRequestAttributes != null;
 
         HttpServletRequest request = servletRequestAttributes.getRequest();
@@ -68,7 +69,10 @@ public class UserService {
 
         Set<Language> userLanguages = user.getLanguages();
 
-        if(userLanguages.stream().noneMatch(l -> l.equals(language)))
+        boolean languageNotInUserLanguages = userLanguages.stream()
+                .noneMatch(l -> l.equals(language));
+
+        if(languageNotInUserLanguages)
         {
             languageRepository.save(language);
             user.addLanguage(language);
@@ -88,7 +92,10 @@ public class UserService {
     {
         User user = this.getUserFromRequest();
 
-        if(user.getLanguages().stream().noneMatch(l -> l.equals(post.getLanguage())))
+        boolean postLanguageNotInUserLanguages = user.getLanguages().stream()
+                .noneMatch(l -> l.equals(post.getLanguage()));
+
+        if(postLanguageNotInUserLanguages)
         {
             throw new EntityNotFoundException(Language.class, post.getLanguage().toString());
         }

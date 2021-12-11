@@ -1,0 +1,23 @@
+{
+  "properties": [
+    {
+      "name": "deepL.apiKey",
+      "type": "java.lang.String",
+      "description": "API Key for DeepL Translation."
+    },
+    {
+      "name": "deepL.endpoint",
+      "type": "java.lang.String",
+      "description": "Endpoint for DeepL Translation."
+    },
+    {
+      "name": "languagetool.endpoint",
+      "type": "java.lang.String",
+      "description": "Endpoint for Language Tool Autocorrection."
+    },
+    {
+      "name": "text-processing.endpoint",
+      "type": "java.lang.String",
+      "description": "Endpoint for Text Processing Sentiment Analysis."
+    }
+  ] }

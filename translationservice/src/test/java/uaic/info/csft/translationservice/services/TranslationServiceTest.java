@@ -1,15 +1,17 @@
 package uaic.info.csft.translationservice.services;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.util.Assert;
+import uaic.info.csft.translationservice.dto.AutoCorrectDTO;
+import uaic.info.csft.translationservice.dto.TranslateDTO;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -18,45 +20,52 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class TranslationServiceTest {
 
+    @Autowired
     private TranslationService translationService;
 
-    @BeforeAll
-    public void setUp()
-    {
-        translationService = new TranslationService();
-    }
+    @Autowired
+    private AutoCorrectService autoCorrectService;
 
     @Test
     public void testTranslation01() {
-        String sourceLanguage = "EN";
-        String targetLanguage = "RO";
-        String translation = translationService.translate(sourceLanguage, targetLanguage, "I like apples");
+        TranslateDTO translateDTO = new TranslateDTO();
+        translateDTO.setSourceLanguage("EN");
+        translateDTO.setTargetLanguage("RO");
+        translateDTO.setText("I like apples");
+        String translation = translationService.translate(translateDTO);
 
         assertEquals(translation, "Îmi plac merele");
     }
 
     @Test
     public void testTranslation02() {
-        String sourceLanguage = "EN";
-        String targetLanguage = "FR";
-        String translation = translationService.translate(sourceLanguage, targetLanguage, "My name is Alex");
+        TranslateDTO translateDTO = new TranslateDTO();
+        translateDTO.setSourceLanguage("EN");
+        translateDTO.setTargetLanguage("FR");
+        translateDTO.setText("My name is Alex");
+        String translation = translationService.translate(translateDTO);
 
         assertEquals(translation, "Mon nom est Alex");
     }
 
     @Test
     public void testAutoCorrect01() {
-        String language = "EN-US";
-        List<String> replacements = translationService.autoCorrect(language, "wrd");
+        AutoCorrectDTO autoCorrectDTO = new AutoCorrectDTO();
+        autoCorrectDTO.setLanguage("EN-US");
+        autoCorrectDTO.setText("wrd");
+        Map<String, List<String>> replacements = autoCorrectService.autoCorrect(autoCorrectDTO);
 
-        Assertions.assertTrue(replacements.contains("word"));
+        Assertions.assertTrue(replacements.get("wrd").contains("word"));
     }
 
     @Test
     public void testAutoCorrect02() {
-        String language = "RO";
-        List<String> replacements = translationService.autoCorrect(language, "cvant");
+        AutoCorrectDTO autoCorrectDTO = new AutoCorrectDTO();
+        autoCorrectDTO.setLanguage("RO");
+        autoCorrectDTO.setText("cvant");
 
-        Assertions.assertTrue(replacements.contains("cuvânt"));
+        Map<String, List<String>> replacements = autoCorrectService.autoCorrect(autoCorrectDTO);
+
+        Assertions.assertTrue(replacements.get("cvant").contains("cuvânt"));
     }
 }

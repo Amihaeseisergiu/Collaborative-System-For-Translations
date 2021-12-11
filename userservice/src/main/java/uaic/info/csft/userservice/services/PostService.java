@@ -57,8 +57,14 @@ public class PostService {
         {
             Post post = foundPost.get();
 
-            if(comment.getUser().getLanguages().stream().noneMatch(l -> l.getName().equals(post.getLanguage().getName())
-                && l.getProficiency().compareTo(post.getLanguage().getProficiency()) >= 0))
+            boolean userLanguageDoesntMatchWithPost = comment.getUser().getLanguages().stream()
+                    .noneMatch(l -> l
+                            .getName()
+                            .equals(post.getLanguage().getName())
+                            && l.getProficiency()
+                            .compareTo(post.getLanguage().getProficiency()) >= 0);
+
+            if(userLanguageDoesntMatchWithPost)
             {
                 throw new EntityNotFoundException(Language.class, post.getLanguage().toString());
             }
