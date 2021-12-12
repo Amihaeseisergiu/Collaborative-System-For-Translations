@@ -22,7 +22,7 @@ spring:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/userservice
     username: postgres
-    password: test
+    password: 12345
 
 jwt:
   header: Authorization

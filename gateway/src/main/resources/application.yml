@@ -8,6 +8,8 @@ spring:
   application:
     name: gateway
 
+
+
 eureka:
   client:
     serviceUrl:
@@ -29,3 +31,4 @@ zuul:
       path: /translation-service/**
       url: http://localhost:8082/
   sensitive-headers:
+
