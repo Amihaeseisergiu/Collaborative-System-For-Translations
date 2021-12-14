@@ -17,3 +17,4 @@ Project for the "Advanced Software Engineering Techniques" course
 ### Load Tests
   - [User Service](https://loadster.app/dashboard/reports/O426KjQek76FXAgX)
   - [Translation Service](https://loadster.app/dashboard/reports/PPUZ9dx5QXVrPyAv)
+  - [Front End](https://loadster.app/dashboard/reports/ikTduFoBtdPMkduA)
