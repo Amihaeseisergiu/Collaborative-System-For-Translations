@@ -1,28 +1,19 @@
 
-import React, {useState, SyntheticEvent} from 'react';
+import React, {useState} from 'react';
 
 import {Link, Redirect} from "react-router-dom";
 
 
-import { FaLock, FaUser } from "react-icons/fa";
+import { FaUser } from "react-icons/fa";
+
+
 const Login = () => {
-    let myStorage = window.localStorage;
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [redirect, setRedirect] = useState(false);
     function submit(e)  {
         e.preventDefault();
         fetchLogin();
-        //     .then(r =>   setRedirect(true))
-        // .catch( e => {
-        //     console.log(e);
-        // })
-
-
-
-
-        //
-        //    return <Redirect to="/" />;
 
     }
     function fetchLogin() {
@@ -38,7 +29,7 @@ const Login = () => {
 
             .then(resp => {
 
-                if(resp.status==200) {
+                if(resp.status===200) {
                     setRedirect(true);
                     return resp.text();
 
@@ -46,17 +37,6 @@ const Login = () => {
             })
             .then(data => {
                 localStorage.setItem('token', data.toString());
-                // fetch('http://localhost:8080/user-service/api/v1/auth/user', {
-                //     method: 'GET',
-                //     headers: {
-                //         'Authorization': localStorage.getItem('token'),
-                //         'Content-Type': 'application/json', 'charset': 'utf-8' ,
-                //
-                //     }
-                //
-                //
-                // })
-                //     .then(rep => console.log(rep))
                 console.log(localStorage.getItem('token'));
             })
             .catch(err => {
@@ -87,12 +67,12 @@ const Login = () => {
                     <form onSubmit={submit} className="flex flex-col items-center space-y-4" >
                         <div className="relative">
                             {/*<span className="flex inset-y-0 items-center pl-4 text-gray-400"> <FaUser/> </span>*/}
-                            <input className="border border-gray-300 outline-none placeholder-gray-400 pl-9 pr-4 py-1 rounded-md transition focus:ring-2 focus:ring-green-300" placeholder="Username..." type="text" required  onChange={e => setUsername(e.target.value)}/>
+                            <input className="border border-gray-300 outline-none placeholder-gray-400 pl-4 pr-4 py-1 rounded-md transition focus:ring-2 focus:ring-green-300" placeholder="Username..." type="text" required  onChange={e => setUsername(e.target.value)}/>
                         </div>
 
                         <div className="relative">
                             {/*<span className="absolute flex inset-y-0 items-center pl-4 text-gray-400"> <FaLock/></span>*/}
-                            <input className="border border-gray-300 outline-none placeholder-gray-400 pl-9 pr-4 py-1 rounded-md transition focus:ring-2 focus:ring-green-300" placeholder="Password..." type="password" required onChange={e => setPassword(e.target.value)}/>
+                            <input className="border border-gray-300 outline-none placeholder-gray-400 pl-4 pr-4 py-1 rounded-md transition focus:ring-2 focus:ring-green-300" placeholder="Password..." type="password" required onChange={e => setPassword(e.target.value)}/>
                         </div>
 
                         <button className="bg-green-400 font-medium inline-flex items-center px-3 py-1 rounded-md shadow-md text-white transition hover:bg-green-500" type="submit">

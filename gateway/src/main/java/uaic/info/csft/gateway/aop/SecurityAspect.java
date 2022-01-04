@@ -25,49 +25,49 @@ import java.util.function.Predicate;
 @RequiredArgsConstructor
 public class SecurityAspect {
 
-    @Value("${jwt.header}")
-    private String jwtHeader;
-
-    private final JwtUtil jwtUtil;
-
-    @Pointcut("execution(public * org.springframework.cloud.netflix.zuul.web..*.*(..))")
-    public void pointCut(){
-
-    }
-
-    @Around("pointCut()")
-    public Object beforeMethod(ProceedingJoinPoint pjp) throws Throwable {
-        ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        assert servletRequestAttributes != null;
-
-        HttpServletRequest request = servletRequestAttributes.getRequest();
-        HttpServletResponse response = servletRequestAttributes.getResponse();
-        assert response != null;
-
-        final List<String> bypassAuth = List.of("/register", "/login");
-
-        Predicate<HttpServletRequest> isApiSecured = r -> bypassAuth.stream()
-                .noneMatch(uri -> r.getRequestURI().contains(uri));
-
-        if(isApiSecured.test(request))
-        {
-            if(request.getHeader(jwtHeader) == null)
-            {
-                response.sendError(HttpStatus.UNAUTHORIZED.value(), "Missing authorization header");
-                return null;
-            }
-
-            final String token = request.getHeader(jwtHeader);
-
-            try {
-                jwtUtil.validateToken(token);
-            } catch(Exception e)
-            {
-                response.sendError(HttpStatus.BAD_REQUEST.value(), "Invalid JWT Token");
-                return null;
-            }
-        }
-
-        return pjp.proceed();
-    }
+//    @Value("${jwt.header}")
+//    private String jwtHeader;
+//
+//    private final JwtUtil jwtUtil;
+//
+//    @Pointcut("execution(public * org.springframework.cloud.netflix.zuul.web..*.*(..))")
+//    public void pointCut(){
+//
+//    }
+//    @CrossOrigin
+//    @Around("pointCut()")
+//    public Object beforeMethod(ProceedingJoinPoint pjp) throws Throwable {
+//        ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+//        assert servletRequestAttributes != null;
+//
+//        HttpServletRequest request = servletRequestAttributes.getRequest();
+//        HttpServletResponse response = servletRequestAttributes.getResponse();
+//        assert response != null;
+//
+//        final List<String> bypassAuth = List.of("/register", "/login");
+//
+//        Predicate<HttpServletRequest> isApiSecured = r -> bypassAuth.stream()
+//                .noneMatch(uri -> r.getRequestURI().contains(uri));
+//
+//        if(isApiSecured.test(request))
+//        {
+//            if(request.getHeader(jwtHeader) == null)
+//            {
+//                response.sendError(HttpStatus.UNAUTHORIZED.value(), "Missing authorization header");
+//                return null;
+//            }
+//
+//            final String token = request.getHeader(jwtHeader);
+//
+//            try {
+//                jwtUtil.validateToken(token);
+//            } catch(Exception e)
+//            {
+//                response.sendError(HttpStatus.BAD_REQUEST.value(), "Invalid JWT Token");
+//                return null;
+//            }
+//        }
+//
+//        return pjp.proceed();
+//    }
 }

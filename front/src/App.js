@@ -26,7 +26,10 @@ export default function App() {
         return () => {
             window.removeEventListener('resize', hideMenu);
         };
+
+
     });
+
     return (
     <>
         <Navbar toggle={toggle} />

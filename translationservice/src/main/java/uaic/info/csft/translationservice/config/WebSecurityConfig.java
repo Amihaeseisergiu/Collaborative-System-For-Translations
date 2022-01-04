@@ -1,18 +1,25 @@
 package uaic.info.csft.translationservice.config;
 
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-@EnableWebSecurity
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+@EnableWebMvc
+public class WebSecurityConfig implements WebMvcConfigurer {
 
     @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.cors().and().csrf().disable()
-            .authorizeRequests()
-            .anyRequest().permitAll();
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                // Set the domain name that allows cross-domain requests
+                .allowedOriginPatterns("*")
+                // whether to allow certificates (cookies)
+                .allowCredentials(true)
+                // set the allowed methods
+                .allowedMethods("*")
+                // Allowed time across domains
+                .maxAge(3600);
     }
 }

@@ -1,4 +1,6 @@
 import React, {useEffect, useState} from 'react';
+import Translation from "../components/Translation";
+import Sentiment from "../components/Sentiment";
 
 const User = () => {
     const [name,setName] = useState('');
@@ -29,10 +31,13 @@ const User = () => {
 
 
     return (
-        <div>
+        <div className="bg-green-100 h-120 flex flex-col justify-center items-center" >
 
-        Hi {name}
+            <p> {name ? 'Hi ' + name : 'You are not logged in'} </p>
+            <Translation/>
+            <Sentiment/>
         </div>
+
     );
 };
 
